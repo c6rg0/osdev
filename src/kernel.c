@@ -2,17 +2,16 @@
 #include <stddef.h>
 #include <stdint.h>
 
-/* Check if the compiler thinks you are targeting the wrong operating system. */
+// Check if the compiler thinks you are targeting the wrong operating system.
 #if defined(__linux__)
 #error "You are not using a cross-compiler, you will most certainly run into trouble"
 #endif
 
-/* This tutorial will only work for the 32-bit ix86 targets. */
+// This will only work for the 32-bit ix86 targets.
 #if !defined(__i386__)
-#error "This tutorial needs to be compiled with a ix86-elf compiler"
+#error "This needs to be compiled with a ix86-elf compiler"
 #endif
 
-/* Hardware text mode color constants. */
 enum vga_color {
 	VGA_COLOR_BLACK = 0,
 	VGA_COLOR_BLUE = 1,
@@ -50,6 +49,7 @@ size_t strlen(const char* str)
 	return len;
 }
 
+// https://en.wikipedia.org/wiki/VGA_text_mode
 #define VGA_WIDTH   80
 #define VGA_HEIGHT  25
 #define VGA_MEMORY  0xB8000 
@@ -86,12 +86,22 @@ void terminal_putentryat(char c, uint8_t color, size_t x, size_t y)
 
 void terminal_putchar(char c) 
 {
-	terminal_putentryat(c, terminal_color, terminal_column, terminal_row);
-	if (++terminal_column == VGA_WIDTH) {
-		terminal_column = 0;
-		if (++terminal_row == VGA_HEIGHT)
-			terminal_row = 0;
-	}
+    if (c == '\n') {
+        terminal_column = 0;
+        terminal_row++;
+    }
+
+    else {
+        terminal_putentryat(c, terminal_color, terminal_column, terminal_row);
+
+        // The below handles when location "x,y + 1" is out of bound
+        // ("++var" is a pre-incrementer (increments before use)).
+        if (++terminal_column == VGA_WIDTH) {
+            terminal_column = 0;
+            if (++terminal_row == VGA_HEIGHT)
+                terminal_row = 0;
+        }
+    }
 }
 
 void terminal_write(const char* data, size_t size) 
@@ -107,9 +117,7 @@ void terminal_writestring(const char* data)
 
 void kernel_main(void) 
 {
-	/* Initialize terminal interface */
 	terminal_initialize();
 
-	/* Newline support is left as an exercise. */
-	terminal_writestring("Hello, kernel World!\n");
+	terminal_writestring("Hello, kernel World!\nThis line should be underneath the greeting.");
 }
