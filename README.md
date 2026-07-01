@@ -24,7 +24,7 @@
   - They won't work to the dot since some directories are specific to nix.
 
 ## How to use the fresh iso
-- On Linux, macOS and BSD, you can use qemu: `$ qemu-system-i386 -cdrom result/bin/myos.iso`.
+- On Linux, macOS and BSD, you can use qemu: `$ qemu-system-i386 -cdrom result/bin/kernel.iso`.
   - (if you done it the nix way) Using `$ nix develop` installs qemu for you.
 - Or flash the iso on a USB and use it on hardware.
 

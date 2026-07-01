@@ -18,41 +18,41 @@
         pname = "myos";
         version = "0.0.1";
 
-        src = ./src;
+        src = ./.;
 
         nativeBuildInputs = with pkgs; [ 
           pkgsCross.i686-embedded.buildPackages.gcc
           grub2
           libisoburn
+          gnumake
         ];
 
         buildInputs = with pkgs; [ 
           qemu
         ];
 
-        phases = [ "preBuildPhase" "buildPhase" "preInstallPhase" "installPhase" ];
-
-        preBuildPhase = ''
-          cd $src
-          pwd
-        '';
+        # What not to run manually:
+          # $ runHoot ...
+          # $ make install ...
+          # anything with $out/ or $TMPDIR
 
         buildPhase = '' 
-          i686-elf-as boot.s -o $TMPDIR/boot.o
-          i686-elf-gcc -c kernel.c -o $TMPDIR/kernel.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
-          i686-elf-gcc -T linker.ld -o $TMPDIR/myos -ffreestanding -O2 -nostdlib $TMPDIR/boot.o $TMPDIR/kernel.o -lgcc
-        '';
-
-        preInstallPhase = ''
-          mkdir -p $out/bin
-          mkdir -p $TMPDIR/isodir/boot/grub/
-          cp grub.cfg $TMPDIR/isodir/boot/grub/grub.cfg
-          cp $TMPDIR/myos $TMPDIR/isodir/boot/myos
+          runHook preBuild
+          make
+          runHook postBuild
         '';
 
         installPhase = ''
-          grub-mkrescue -o $TMPDIR/myos.iso $TMPDIR/isodir
-          mv $TMPDIR/myos.iso $TMPDIR/myos $out/bin/
+          runHook preInstall
+          mkdir -p $out/bin
+          make install PREFIX=$out/bin
+
+          mkdir -p $TMPDIR/isodir/boot/grub/
+          cp src/grub.cfg $TMPDIR/isodir/boot/grub/grub.cfg
+          cp $out/bin/kernel.elf $TMPDIR/isodir/boot/kernel.elf
+
+          grub-mkrescue -o $out/bin/kernel.iso $TMPDIR/isodir
+          runHook postInstall
         '';
 
         meta = with pkgs.lib; {
