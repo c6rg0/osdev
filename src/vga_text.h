@@ -1,9 +1,9 @@
+#ifndef VGA_TEXT_H
+#define VGA_TEXT_H
+
 #include <stdint.h>
 #include <stdint.h>
 #include <stddef.h>
-
-#ifndef VGA_H
-#define VGA_H
 
 enum vga_color {
 	VGA_COLOR_BLACK = 0,
@@ -45,6 +45,5 @@ void terminal_putentryat(char c, uint8_t color, size_t x, size_t y);
 void terminal_putchar(char c);
 void terminal_write(const char* data, size_t size);
 void terminal_writestring(const char* data);
-static inline void disable_cursor();
 
 #endif

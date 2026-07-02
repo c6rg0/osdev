@@ -1,4 +1,4 @@
-#include "vga.h"
+#include "vga_text.h"
 
 static inline uint8_t vga_entry_color(enum vga_color fg, enum vga_color bg) 
 {
@@ -83,9 +83,4 @@ void terminal_write(const char* data, size_t size)
 void terminal_writestring(const char* data) 
 {
 	terminal_write(data, strlen(data));
-}
-
-static inline void disable_cursor()
-{
-    __asm__ volatile ("call disable_cursor");
 }
