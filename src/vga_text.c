@@ -1,4 +1,5 @@
 #include "vga_text.h"
+#include "vga_text_cursor.h"
 
 static inline uint8_t vga_entry_color(enum vga_color fg, enum vga_color bg) 
 {
@@ -53,6 +54,7 @@ void terminal_putchar(char c)
         terminal_row++;
     } else {
         terminal_putentryat(c, terminal_color, terminal_column, terminal_row);
+        move_cursor(terminal_column, terminal_row);
 
         // The below handles when location "x,y + 1" is out of bound
         // ("++var" is a pre-incrementer (increments before use)).
