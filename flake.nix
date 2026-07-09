@@ -36,23 +36,53 @@
           # $ make install ...
           # anything with $out/ or $TMPDIR
 
+        patchPhase = ''
+          sed -i 's+export SYSROOT="$(pwd)/sysroot"+export SYSROOT="$TMPDIR/sysroot"+g' config.sh 
+        '';
+
+        configurePhase = ''
+          set -e
+          . ./config.sh
+        '';
+
         buildPhase = '' 
           runHook preBuild
-          make
+
+          # headers.sh
+          # mkdir -p "$SYSROOT"
+          
+          for PROJECT in $SYSTEM_HEADER_PROJECTS; do
+            (cd $PROJECT && DESTDIR="$SYSROOT" $MAKE install-headers)
+          done
+
+          # build.sh
+          for PROJECT in $PROJECTS; do
+            (cd $PROJECT && DESTDIR="$SYSROOT" $MAKE install)
+          done
+
           runHook postBuild
         '';
 
         installPhase = ''
           runHook preInstall
+
           mkdir -p $out/bin
-          make install PREFIX=$out/bin
+          mkdir -p $out/share
+          pwd >> $out/share/dir.txt
+          ls >> $out/share/dir.txt
 
           mkdir -p $TMPDIR/isodir/boot/grub/
-          cp src/grub.cfg $TMPDIR/isodir/boot/grub/grub.cfg
-          cp $out/bin/kernel.elf $TMPDIR/isodir/boot/kernel.elf
 
-          grub-mkrescue -o $out/bin/kernel.iso $TMPDIR/isodir
-          runHook postInstall
+          cp $SYSROOT/boot/myos.elf $TMPDIR/isodir/boot/myos.elf
+          cp $SYSROOT/boot/myos.elf $out/bin/myos.elf
+          cat > $TMPDIR/isodir/boot/grub/grub.cfg << EOF
+          menuentry "myos" {
+            multiboot /boot/myos.elf
+          }
+          EOF
+          grub-mkrescue -o $out/bin/myos.iso $TMPDIR/isodir
+
+          #runHook postInstall
         '';
 
         meta = with pkgs.lib; {
