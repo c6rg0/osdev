@@ -1,5 +1,5 @@
-# 32-bit (i386) freestanding console
-- Kernel init and kernel (which is just a VGA driver).
+# IA-32 (i686) freestanding console
+- Kernel init, kernel and VGA driver.
 - Credits for tutorial and tasks: [wiki.osdev.org](https://wiki.osdev.org/Bare_Bones).
 - The MIT license for the tutorial is in the root of the directory.
 
@@ -13,8 +13,8 @@
 ## How to build with nix pacakge manager
 1. Have nix(os) installed (supports Linux and Macos),
 2. Download the repo:
-  - `$ git clone https://github.com/c6rg0/osLearning.git`
-  - `$ cd osLearning`
+  - `$ git clone https://github.com/c6rg0/Osdev.git`
+  - `$ cd Osdev`
 2. `$ nix build`
 
 ### Manually
