@@ -10,6 +10,7 @@
   - outb and inb (the most basic I/O)
 
 ### To do:
+  - Add memory management (GDT, LDT etc)
   - Add interupt support
   - Add a ps/2 (keyboard) driver
   - Make a (command line) shell
@@ -45,6 +46,9 @@
 ## How to use the fresh iso
 - As far as I know, the only thing you need to make the iso work is a bootloader that supports the multiboot header (e.x. GRUB).
 
-- On Linux, macOS and BSD, the easiest way is to use qemu: `$ qemu-system-i386 -cdrom result/bin/myos.iso`.
+- On Linux, macOS and BSD, the easiest way is to use qemu: `$ qemu-system-i386 -cdrom result/bin/myos.iso &`.
   - If you done it the nix way, using `$ nix develop` installs qemu for you.
+
+## Debuging with qemu:
+- `qemu-system-i386 -cdrom result/bin/myos.iso -d int,cpu_reset -no-reboot -no-shutdown -monitor stdio`
 
