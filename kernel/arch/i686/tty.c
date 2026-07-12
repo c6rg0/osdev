@@ -52,7 +52,7 @@ uint16_t get_cursor_position(void)
     return pos;
 }
 
-void terminal_initialize(void) {
+void terminal_initialise(void) {
 	terminal_row = 0;
 	terminal_column = 0;
 	terminal_color = vga_entry_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);

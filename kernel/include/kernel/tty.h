@@ -11,7 +11,7 @@ void disable_cursor(void);
 void move_cursor(int x, int y); // coords are zero indexed
 uint16_t get_cursor_position(void);
 
-void terminal_initialize(void);
+void terminal_initialise(void);
 extern void terminal_putchar(char c);
 extern void terminal_write(const char* data, size_t size);
 extern void terminal_writestring(const char* data);
