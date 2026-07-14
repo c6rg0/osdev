@@ -22,10 +22,17 @@ reload_segments:
 .type reload_CS, @function
 .reload_CS:
     // Reload data segment registers:
-    mov $0x10, %ax // 0x10 is a stand-in for your data segment
+    mov $0x10, %ax  // 0x10 is a stand-in for your data segment
     mov %ax, %ds
     mov %ax, %es
     mov %ax, %fs
     mov %ax, %gs
     mov %ax, %ss
+    ret
+
+.global load_tss 
+.type load_tss, @function
+load_tss:
+    mov $0x28, %ax  //The descriptor of the TSS in the GDT (e.g. 0x28 if the sixths entry in your GDT describes your TSS)
+    ltr %ax         //The actual load
     ret

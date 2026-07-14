@@ -3,8 +3,9 @@
 #include "interupts.h"
 #include <stdint.h>
 #include <stdio.h>
+#include <string.h>
 
-static uint64_t gdt[5];
+static uint64_t gdt[6];
 
 uint64_t create_descriptor(uint32_t base, uint32_t limit, uint16_t flag)
 {
@@ -25,21 +26,27 @@ uint64_t create_descriptor(uint32_t base, uint32_t limit, uint16_t flag)
     return descriptor;
 }
 
+tss_struct tss_entry;
+
 void gdt_initialise(void)
 {
+    clear_interupt_flag();
     gdt[0] = create_descriptor(0, 0, 0); // Null descriptor
     gdt[1] = create_descriptor(0, 0x000FFFFF, (GDT_CODE_PL0));
     gdt[2] = create_descriptor(0, 0x000FFFFF, (GDT_DATA_PL0));
     gdt[3] = create_descriptor(0, 0x000FFFFF, (GDT_CODE_PL3));
     gdt[4] = create_descriptor(0, 0x000FFFFF, (GDT_DATA_PL3));
-    
+
+    memset(&tss_entry, 0, sizeof(tss_entry));
+    tss_entry.ss0 = 0x10;  // kernel data segment selector (index 2 * 8)
+    gdt[5] = create_descriptor((uint32_t)&tss_entry, sizeof(tss_entry) - 1, (GDT_TSS));
+
     struct gdt_ptr ptr;
     ptr.limit = sizeof(gdt) - 1;
     ptr.base = (uint32_t)&gdt;
 
-    clear_interupt_flag();
-
     if(!set_gdt(&ptr) ||
-        !reload_segments())
+        !reload_segments() ||
+        !load_tss())
         kernel_panic();
 }
