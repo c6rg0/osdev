@@ -57,7 +57,7 @@ struct gdt_ptr {
     uint32_t base;
 } __attribute__((packed));
 
-typedef struct __tss_struct {
+typedef struct {
     uint32_t prev_tss;   // Previous TSS (used with hardware task switching, unused here)
     uint32_t esp0;        // Stack pointer to load on ring 0 interrupt/privilege switch
     uint32_t ss0;         // Stack segment to load on ring 0 interrupt/privilege switch
@@ -78,6 +78,6 @@ int load_tss(void);
 
 // gdt.c
 uint64_t create_descriptor(uint32_t base, uint32_t limit, uint16_t flag);
-void gdt_initialise(void);
+void gdt_init(void);
 
 #endif

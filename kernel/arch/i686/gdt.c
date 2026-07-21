@@ -1,6 +1,4 @@
 #include <kernel/gdt.h>
-#include <kernel/panic.h>
-#include "interupts.h"
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
@@ -28,9 +26,8 @@ uint64_t create_descriptor(uint32_t base, uint32_t limit, uint16_t flag)
 
 tss_struct tss_entry;
 
-void gdt_initialise(void)
+void gdt_init(void)
 {
-    clear_interupt_flag();
     gdt[0] = create_descriptor(0, 0, 0); // Null descriptor
     gdt[1] = create_descriptor(0, 0x000FFFFF, (GDT_CODE_PL0));
     gdt[2] = create_descriptor(0, 0x000FFFFF, (GDT_DATA_PL0));
@@ -45,8 +42,7 @@ void gdt_initialise(void)
     ptr.limit = sizeof(gdt) - 1;
     ptr.base = (uint32_t)&gdt;
 
-    if(!set_gdt(&ptr) ||
-        !reload_segments() ||
-        !load_tss())
-        kernel_panic();
+    set_gdt(&ptr);
+    reload_segments();
+    load_tss();
 }

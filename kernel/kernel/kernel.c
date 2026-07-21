@@ -1,11 +1,21 @@
 #include <stdio.h>
 #include <kernel/tty.h>
 #include <kernel/gdt.h>
+#include <kernel/idt.h>
 
 void kernel_main(void)
 {
-	terminal_initialise();
+	tty_init();
+    printf("> TTY initialised!\n");
+    gdt_init();
+    printf("> GDT initialised!\n");
+    idt_init();
+    printf("> IDT initialised!\n");
+
+    // You can use a break point to confirm that the GDT and IDT are getting loaded:
+    __asm__ volatile ("1: jmp 1b");
+
+    /*
     printf("Line 1\nLine 2\nLine 3\nLine 4\nLine 5\nLine 6\nLine 7\nLine 8\nLine 9\nLine 10\nLine 11\nLine 12\nLine 13\nLine 14\nLine 15\nLine 16\nLine 17\nLine 18\nLine 19\nLine 20\nLine 21\nLine 22\nLine 23\nLine 24\nLine 25 (VGA_HEIGHT; Last line without scrolling)\nLine 26\n");
-    gdt_initialise();
-    printf("GDT initialised!");
+    */
 }
