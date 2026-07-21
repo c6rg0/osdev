@@ -2,6 +2,7 @@
 #include <kernel/tty.h>
 #include <kernel/gdt.h>
 #include <kernel/idt.h>
+#include <kernel/pic.h>
 
 void kernel_main(void)
 {
@@ -11,6 +12,12 @@ void kernel_main(void)
     printf("> GDT initialised!\n");
     idt_init();
     printf("> IDT initialised!\n");
+    pic_init(0x20, 0x28); // magic hexes
+    printf("> PIC initialised!\n");
+    uint16_t irr = pic_get_irr();
+    printf("%p\n", irr);
+    uint16_t isr = pic_get_isr();
+    printf("%p\n", isr);
 
     // You can use a break point to confirm that the GDT and IDT are getting loaded:
     __asm__ volatile ("1: jmp 1b");
