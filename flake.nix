@@ -29,6 +29,7 @@
 
         buildInputs = with pkgs; [ 
           qemu
+          clang-tools
         ];
 
         # What not to run manually:
