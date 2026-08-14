@@ -36,6 +36,7 @@
   - `$ git clone https://github.com/c6rg0/Osdev.git`
   - `$ cd Osdev`
 2. `$ nix build`
+  - Optionally to print build logs and see compiler warnings: `$ nix build --print-build-logs`
 
 ### Manually
 1. Use the `flake.nix` to read the dependencies:

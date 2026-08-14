@@ -1,3 +1,4 @@
+# TODO: This file needs a refactor
 CFLAGS?=-g
 CPPFLAGS?=
 LDFLAGS?=-L$(SYSROOT)/usr/lib
@@ -9,7 +10,7 @@ EXEC_PREFIX?=$(PREFIX)
 BOOTDIR?=$(EXEC_PREFIX)/boot
 INCLUDEDIR?=$(PREFIX)/include
 
-CFLAGS:=$(CFLAGS) -std=gnu11 -ffreestanding -O2 -Wall -Wextra -Isrc/ -MMD -MP -fcommon
+CFLAGS:=$(CFLAGS) -std=gnu11 -ffreestanding -O2 -Wall -Wextra -Isrc/ -MMD -MP -fcommon -mgeneral-regs-only
 CPPFLAGS:=$(CPPFLAGS) -D__is_kernel -Iinclude
 LDFLAGS:=$(LDFLAGS)
 LIBS:=$(LIBS) -nostdlib -lk -lgcc

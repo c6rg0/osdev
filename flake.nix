@@ -34,23 +34,20 @@
         # What not to run manually:
           # $ runHoot ...
           # $ make install ...
-          # anything with $out/ or $TMPDIR
+        # Also, $out and $TMPDIR are granted by nix (and not created in the script).
 
         patchPhase = ''
-          sed -i 's+export SYSROOT="$(pwd)/sysroot"+export SYSROOT="$TMPDIR/sysroot"+g' config.sh 
+          sed -i 's+export SYSROOT="$(pwd)/sysroot"+export SYSROOT="$TMPDIR/sysroot"+g' scripts/config.sh 
         '';
-
+        
         configurePhase = ''
           set -e
-          . ./config.sh
+          . scripts/config.sh
         '';
 
         buildPhase = '' 
           runHook preBuild
 
-          # headers.sh
-          # mkdir -p "$SYSROOT"
-          
           for PROJECT in $SYSTEM_HEADER_PROJECTS; do
             (cd $PROJECT && DESTDIR="$SYSROOT" $MAKE install-headers)
           done
