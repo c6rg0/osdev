@@ -1,38 +1,41 @@
 #include <limits.h>
-#include <stdbool.h>
 #include <stdarg.h>
+#include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h> // putchar(bytes[i]) -> (include/)<kernel/tty.h> <- (kernel/)arch/{host}/tty.c <- (kernel/)arch/{host}/vga.h
 #include <string.h>
-#include <stdint.h>
 
 /*
-    if(function(parameter))
-        logic;
+	if(function(parameter))
+		logic;
 */
-// Is a pattern that works, not sure whether the function 
-// or the condition is triggered first?   
+// Is a pattern that works, not sure whether the function
+// or the condition is triggered first?
 
-static bool print(const char* data, size_t length) {
-	const unsigned char* bytes = (const unsigned char*) data;
+static bool print(const char* data, size_t length)
+{
+	const unsigned char* bytes = (const unsigned char*)data;
 	for (size_t i = 0; i < length; i++)
 		if (putchar(bytes[i]) == EOF)
 			return false;
 	return true;
 }
 
-static char* print_hex (uintptr_t value) {
-    static const char digits[] = "0123456789ABCDEF";
-    char buffer[8];
-    
-    for (int i = 7; i >= 0; i--) {
-        buffer[i] = digits[value & 0xF];
-        value >>= 4;
-    }
-    
-    print(buffer, 8);
+static char* print_hex(uintptr_t value)
+{
+	static const char digits[] = "0123456789ABCDEF";
+	char			  buffer[8];
+
+	for (int i = 7; i >= 0; i--) {
+		buffer[i] = digits[value & 0xF];
+		value >>= 4;
+	}
+
+	print(buffer, 8);
 }
 
-int printf(const char* restrict format, ...) {
+int printf(const char* restrict format, ...)
+{
 	va_list parameters;
 	va_start(parameters, format);
 
@@ -62,7 +65,7 @@ int printf(const char* restrict format, ...) {
 
 		if (*format == 'c') {
 			format++;
-			char c = (char) va_arg(parameters, int /* char promotes to int */);
+			char c = (char)va_arg(parameters, int /* char promotes to int */);
 			if (!maxrem) {
 				// TODO: Set errno to EOVERFLOW.
 				return -1;
@@ -74,7 +77,7 @@ int printf(const char* restrict format, ...) {
 		} else if (*format == 's') {
 			format++;
 			const char* str = va_arg(parameters, const char*);
-			size_t len = strlen(str);
+			size_t		len = strlen(str);
 			if (maxrem < len) {
 				// TODO: Set errno to EOVERFLOW.
 				return -1;
@@ -83,9 +86,9 @@ int printf(const char* restrict format, ...) {
 				return -1;
 			written += len;
 
-        } else if (*format == 'p') {
+		} else if (*format == 'p') {
 			format++;
-            const uintptr_t ptr = (uintptr_t) va_arg(parameters, void*);
+			const uintptr_t ptr = (uintptr_t)va_arg(parameters, void*);
 
 			size_t len = 10;
 			if (maxrem < 10) {
@@ -93,17 +96,17 @@ int printf(const char* restrict format, ...) {
 				return -1;
 			}
 
-            const char* hex_sign = "0x";
+			const char* hex_sign = "0x";
 
-            if(!print(hex_sign, 2))
-                return -1;
+			if (!print(hex_sign, 2))
+				return -1;
 
-            print_hex(ptr);
+			print_hex(ptr);
 
-            written += len;
+			written += len;
 
 		} else {
-			format = format_begun_at;
+			format	   = format_begun_at;
 			size_t len = strlen(format);
 			if (maxrem < len) {
 				// TODO: Set errno to EOVERFLOW.
