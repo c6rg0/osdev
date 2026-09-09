@@ -1,8 +1,6 @@
 SYSTEM_HEADER_PROJECTS="libc kernel"
 PROJECTS="libc kernel" # two seperate projects in one string
 
-# Host = target cpu architecture.
-# Options: "i686-elf", ...
 export HOST=i686
 EXECUTABLE_FORMAT=elf
 
@@ -13,14 +11,10 @@ export CC=${HOST}-${EXECUTABLE_FORMAT}-gcc
 
 # The below are related to the kernel headers
 export PREFIX=/usr
-export EXEC_PREFIX=$PREFIX # IDK why this exists
+export EXEC_PREFIX=$PREFIX
 export BOOTDIR=/boot
 export LIBDIR=$EXEC_PREFIX/lib
 export INCLUDEDIR=$PREFIX/include
-
-# Compiler flags
-export CFLAGS='-O2 -g'
-export CPPFLAGS=''
 
 # Configure the cross-compiler to use the desired system root.
 export SYSROOT="$(pwd)/sysroot"
