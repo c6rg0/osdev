@@ -2,7 +2,7 @@
 #define ARCH_I386_VGA_H
 
 #include <stdint.h>
-// included by tty.c <- <kernel/tty.h>
+// included by tty.c <- <sys/tty.h>
 
 enum vga_color {
 	VGA_COLOR_BLACK			= 0,

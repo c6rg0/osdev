@@ -2,7 +2,7 @@
 #include <stdarg.h>
 #include <stdbool.h>
 #include <stdint.h>
-#include <stdio.h> // putchar(bytes[i]) -> (include/)<kernel/tty.h> <- (kernel/)arch/{host}/tty.c <- (kernel/)arch/{host}/vga.h
+#include <stdio.h> // putchar(bytes[i]) -> <sys/tty.h> <- tty.c <- vga.h
 #include <string.h>
 
 /*

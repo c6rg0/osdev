@@ -1,4 +1,4 @@
-#include <kernel/io.h>
+#include <sys/io.h>
 
 // https://en.wikipedia.org/wiki/Memory-mapped_I/O_and_port-mapped_I/O
 // https://wiki.osdev.org/Inline_Assembly/Examples#I.2FO_access

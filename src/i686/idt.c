@@ -1,4 +1,4 @@
-#include <kernel/idt.h>
+#include <sys/idt.h>
 #include <stdbool.h>
 
 void exception_handler()

@@ -9,7 +9,7 @@ CFLAGS:=$(CFLAGS) -g -std=gnu11 -ffreestanding -O2 -Wall -Wextra $(ARCH_CFLAGS)
 CPPFLAGS:=$(CPPFLAGS) -D__is_libc -Iinclude $(ARCH_CPPFLAGS)
 LIBK_CFLAGS:=$(CFLAGS) $(KERNEL_ARCH_CFLAGS)
 LIBK_CPPFLAGS:=$(CPPFLAGS) -D__is_libk $(KERNEL_ARCH_CPPFLAGS)
-ARCHDIR=arch/$(HOST)
+ARCHDIR=$(HOST)
 
 include $(ARCHDIR)/make.config
 

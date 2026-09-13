@@ -1,5 +1,5 @@
-SYSTEM_HEADER_PROJECTS="libc kernel"
-PROJECTS="libc kernel" # two seperate projects in one string
+SYSTEM_HEADER_PROJECTS="libc src"
+PROJECTS="libc src" # two seperate projects in one string
 
 export HOST=i686
 EXECUTABLE_FORMAT=elf
