@@ -1,5 +1,5 @@
-#include <sys/idt.h>
 #include <stdbool.h>
+#include <sys/idt.h>
 
 void exception_handler()
 {

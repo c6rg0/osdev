@@ -1,6 +1,6 @@
+#include <stdint.h>
 #include <sys/io.h>
 #include <sys/pic.h>
-#include <stdint.h>
 
 void pic_send_eoi(uint8_t irq)
 {

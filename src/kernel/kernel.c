@@ -1,8 +1,8 @@
+#include <stdio.h>
 #include <sys/gdt.h>
 #include <sys/idt.h>
 #include <sys/pic.h>
 #include <sys/tty.h>
-#include <stdio.h>
 
 void kernel_main(void)
 {
