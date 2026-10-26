@@ -11,9 +11,9 @@
 ---
 AccessModifierOffset: -4
 AlignAfterOpenBracket: Align
-AlignConsecutiveAssignments: true 
-AlignConsecutiveDeclarations: true 
-AlignConsecutiveMacros: true 
+AlignConsecutiveAssignments: false
+AlignConsecutiveDeclarations: false
+AlignConsecutiveMacros: true
 AlignEscapedNewlines: Left
 AlignOperands: true
 AlignTrailingComments: true
@@ -27,8 +27,8 @@ AlwaysBreakAfterDefinitionReturnType: None
 AlwaysBreakAfterReturnType: None
 AlwaysBreakBeforeMultilineStrings: false
 AlwaysBreakTemplateDeclarations: false
-BinPackArguments: true
-BinPackParameters: true
+BinPackArguments: true 
+BinPackParameters: true 
 BraceWrapping:
   AfterClass: false
   AfterControlStatement: false
@@ -98,16 +98,19 @@ PenaltyReturnTypeOnItsOwnLine: 60
 
 PointerAlignment: Right
 # ReflowComments: Always
-SortIncludes: true 
+SortIncludes: false 
 SortUsingDeclarations: false
-SpaceAfterCStyleCast: false
-SpaceAfterTemplateKeyword: true
+SpaceAfterCStyleCast: true 
+SpaceAfterTemplateKeyword: false
 SpaceBeforeAssignmentOperators: true
+SpaceBeforeCaseColon: true
+SpaceBeforeCpp11BracedList: true
 SpaceBeforeCtorInitializerColon: true
 SpaceBeforeInheritanceColon: true
 SpaceBeforeParens: ControlStatementsExceptForEachMacros
+SpaceBeforeSquareBrackets: true
 SpaceBeforeRangeBasedForLoopColon: true
-SpaceInEmptyParentheses: false
+SpaceInEmptyParentheses: false 
 # SpacesBeforeTrailingComments: 2
 SpacesInAngles: false
 SpacesInContainerLiterals: false
@@ -116,7 +119,7 @@ SpacesInParentheses: false
 SpacesInSquareBrackets: false
 SpacesInLineCommentPrefix:
   Minimum: 1
-Standard: Cpp03
+Standard: Latest
 TabWidth: 4
-UseTab: Always
+UseTab: false
 ...
