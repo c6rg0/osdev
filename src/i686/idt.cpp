@@ -39,7 +39,8 @@ void Idt::set_descriptor(uint8_t vector, void* isr, uint8_t flags)
 
 }
 
-void exception_handler(void) {
-    __asm__ volatile ("cli; hlt");
+void exception_handler(void)
+{
+    __asm__ volatile("cli; hlt");
     __builtin_unreachable();
 }

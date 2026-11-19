@@ -17,6 +17,10 @@ extern "C" void kernel_main(void)
     Sys::Pic pic(0x20, 0x28); // magic hexes
     printf("> PIC initialised!\n");
 
+    /* 
+     * The below prints malformed strings (tbf it didn't work properly before):
+    > kernel/kernel.cpp:22:14: warning: format '%p' expects argument of type 'void*', but argument 2 has type 'int' [-Wformat=]
+    */
     uint16_t irr = pic.get_irr();
     printf("%p\n", irr);
 
@@ -27,10 +31,5 @@ extern "C" void kernel_main(void)
     // IDT are getting loaded:
     __asm__ volatile("1: jmp 1b");
 
-    /*
-    printf("Line 1\nLine 2\nLine 3\nLine 4\nLine 5\nLine 6\nLine 7\nLine 8\nLine
-    9\nLine 10\nLine 11\nLine 12\nLine 13\nLine 14\nLine 15\nLine 16\nLine
-    17\nLine 18\nLine 19\nLine 20\nLine 21\nLine 22\nLine 23\nLine 24\nLine 25
-    (VGA_HEIGHT; Last line without scrolling)\nLine 26\n");
-    */
+    printf("Line 1\nLine 2\nLine 3\nLine 4\nLine 5\nLine 6\nLine 7\nLine 8\nLine9\nLine 10\nLine 11\nLine 12\nLine 13\nLine 14\nLine 15\nLine 16\nLine 17\nLine 18\nLine 19\nLine 20\nLine 21\nLine 22\nLine 23\nLine 24\nLine 25 (VGA_HEIGHT; Last line without scrolling)\nLine 26\n");
 }

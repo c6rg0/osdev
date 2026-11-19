@@ -48,7 +48,7 @@ libk.a: $(LIBK_OBJS)
 	$(CC) -MD -c $< -o $@ $(CFLAGS)
 
 .cpp.o:
-	$(CXX) -MD -c $< -o $@ $(CPPFLAGS)
+	$(CXX) -MD -c $< -o $@ $(CFLAGS) $(CPPFLAGS)
 
 .cpp.S:
 	$(CXX) -MD -c $< -o $@ $(CPPFLAGS)
@@ -57,7 +57,7 @@ libk.a: $(LIBK_OBJS)
 	$(CC) -MD -c $< -o $@ $(LIBK_CFLAGS)
 
 .cpp.libk.o:
-	$(CXX) -MD -c $< -o $@ $(LIBK_CPPFLAGS)
+	$(CC) -MD -c $< -o $@ $(LIBK_CFLAGS) $(LIBK_CPPFLAGS)
 
 .S.libk.o:
 	$(CC) -MD -c $< -o $@ $(LIBK_CFLAGS) $(LIBK_CPPFLAGS)

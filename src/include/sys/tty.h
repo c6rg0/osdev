@@ -28,8 +28,8 @@ public:
 class Terminal {
 public:
     Terminal(void);
-    void write_string(const char* data);
     void put_char(char c);
+    void write_string(const char* data);
 
 private:
     Cursor cursor;

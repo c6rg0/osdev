@@ -4,9 +4,9 @@
 #include <stdint.h>
 
 extern "C" {
-    int set(struct gdt_ptr* ptr);
-    int reload_segments(void);
-    int load_tss(void);
+int set(struct gdt_ptr* ptr);
+int reload_segments(void);
+int load_tss(void);
 }
 
 namespace Sys
