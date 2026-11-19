@@ -5,13 +5,6 @@
 #include <stdio.h> // putchar(bytes[i]) -> <sys/tty.h> <- tty.c <- vga.h
 #include <string.h>
 
-/*
-    if(function(parameter))
-        logic;
-*/
-// Is a pattern that works, not sure whether the function
-// or the condition is triggered first?
-
 static bool print(const char* data, size_t length)
 {
     const unsigned char* bytes = (const unsigned char*) data;
@@ -34,7 +27,7 @@ static char* print_hex(uintptr_t value)
     print(buffer, 8);
 }
 
-int printf(const char* restrict format, ...)
+extern "C" int printf(const char* __restrict format, ...)
 {
     va_list parameters;
     va_start(parameters, format);

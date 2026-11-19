@@ -6,7 +6,7 @@ BOOTDIR?=$(EXEC_PREFIX)/boot
 INCLUDEDIR?=$(PREFIX)/include
 
 CFLAGS := $(CFLAGS) -g -std=gnu11 -ffreestanding -O2 -Wall -Wextra -Isrc/ -MMD -MP -fcommon -mgeneral-regs-only $(KERNEL_ARCH_CFLAGS)
-CPPFLAGS := $(CPPFLAGS) -D__is_kernel -Iinclude $(KERNEL_ARCH_CPPLAGS)
+CPPFLAGS := $(CPPFLAGS) -D__is_kernel -Iinclude/ -MMD -MP -fcommon -fno-exceptions -fno-rtti $(KERNEL_ARCH_CPPLAGS)
 LDFLAGS := -L$(SYSROOT)/usr/lib $(KERNEL_ARCH_LDFLAGS)
 LIBS := -nostdlib -lk -lgcc $(KERNEL_ARCH_LIBS)
 ARCHDIR = $(HOST)
@@ -14,11 +14,12 @@ ARCHDIR = $(HOST)
 include $(ARCHDIR)/make.config
 
 CCODE := $(shell find kernel/ $(ARCHDIR) -type f -name '*.c')
+CPPCODE := $(shell find kernel/ $(ARCHDIR) -type f -name '*.cpp')
 SCODE := $(shell find $(ARCHDIR) -type f -name '*.S')
 SCODE := $(filter-out $(ARCHDIR)/crti.S, $(SCODE))
 SCODE := $(filter-out $(ARCHDIR)/crtn.S, $(SCODE))
 
-KERNEL_OBJS = $(CCODE:.c=.o) $(SCODE:.S=.o)
+KERNEL_OBJS = $(CCODE:.c=.o) $(CPPCODE:.cpp=.o) $(SCODE:.S=.o)
 
 OBJS = \
 $(ARCHDIR)/crti.o \
@@ -51,10 +52,13 @@ $(ARCHDIR)/crtbegin.o $(ARCHDIR)/crtend.o:
 	OBJ=`$(CC) $(CFLAGS) $(LDFLAGS) -print-file-name=$(@F)` && cp "$$OBJ" $@
 
 .c.o:
-	$(CC) -MD -c $< -o $@ $(CFLAGS) $(CPPFLAGS)
+	$(CC) -MD -c $< -o $@ $(CFLAGS)
+
+.cpp.o:
+	$(CXX) -MD -c $< -o $@ $(CPPFLAGS)
 
 .S.o:
-	$(CC) -MD -c $< -o $@ $(CFLAGS) $(CPPFLAGS)
+	$(CC) -MD -c $< -o $@ $(CFLAGS)
 
 clean:
 	rm -f myos.elf

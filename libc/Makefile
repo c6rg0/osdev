@@ -6,7 +6,7 @@ INCLUDEDIR?=$(PREFIX)/include
 LIBDIR?=$(EXEC_PREFIX)/lib
 
 CFLAGS:=$(CFLAGS) -g -std=gnu11 -ffreestanding -O2 -Wall -Wextra $(ARCH_CFLAGS)
-CPPFLAGS:=$(CPPFLAGS) -D__is_libc -Iinclude $(ARCH_CPPFLAGS)
+CPPFLAGS:=$(CPPFLAGS) -D__is_libc -Iinclude -Isrc/ -fno-exceptions -fno-rtti $(ARCH_CPPFLAGS)
 LIBK_CFLAGS:=$(CFLAGS) $(KERNEL_ARCH_CFLAGS)
 LIBK_CPPFLAGS:=$(CPPFLAGS) -D__is_libk $(KERNEL_ARCH_CPPFLAGS)
 ARCHDIR=$(HOST)
@@ -14,7 +14,8 @@ ARCHDIR=$(HOST)
 include $(ARCHDIR)/make.config
 
 CCODE := $(shell find stdio/ stdlib/ string/ $(ARCHDIR) -type f -name '*.c')
-FREEOBJS = $(CCODE:.c=.o)
+CPPCODE := $(shell find stdio/ stdlib/ string/ $(ARCHDIR) -type f -name '*.cpp')
+FREEOBJS = $(CCODE:.c=.o) $(CPPCODE:.cpp=.o)
 
 # "Hosted" is the opposite of "freestanding"
 HOSTEDOBJS=\
@@ -41,13 +42,22 @@ libk.a: $(LIBK_OBJS)
 	$(AR) rcs $@ $(LIBK_OBJS)
 
 .c.o:
-	$(CC) -MD -c $< -o $@ $(CFLAGS) $(CPPFLAGS)
+	$(CC) -MD -c $< -o $@ $(CFLAGS)
 
 .c.S:
-	$(CC) -MD -c $< -o $@ $(CFLAGS) $(CPPFLAGS)
+	$(CC) -MD -c $< -o $@ $(CFLAGS)
+
+.cpp.o:
+	$(CXX) -MD -c $< -o $@ $(CPPFLAGS)
+
+.cpp.S:
+	$(CXX) -MD -c $< -o $@ $(CPPFLAGS)
 
 .c.libk.o:
-	$(CC) -MD -c $< -o $@ $(LIBK_CFLAGS) $(LIBK_CPPFLAGS)
+	$(CC) -MD -c $< -o $@ $(LIBK_CFLAGS)
+
+.cpp.libk.o:
+	$(CXX) -MD -c $< -o $@ $(LIBK_CPPFLAGS)
 
 .S.libk.o:
 	$(CC) -MD -c $< -o $@ $(LIBK_CFLAGS) $(LIBK_CPPFLAGS)

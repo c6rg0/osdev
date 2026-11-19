@@ -3,6 +3,52 @@
 
 #include <stdint.h>
 
+namespace Sys
+{
+
+class Pic {
+public:
+    // TODO: I don't know which of these should be public or
+    // private
+
+    /*
+    Arguments:
+        offset1 - vector offset for master PIC
+            vectors on the master become offset1..offset1+7
+        offset2 - same for slave PIC: offset2..offset2+7
+    */
+    Pic(int offset1, int offset2);
+
+    void disable(void);
+
+    /*
+     * Reinitialize the PIC controllers, giving them specified
+     * vector offsets rather than 8h and 70h, as configured by
+     * default
+     */
+    void send_eoi(uint8_t irq);
+
+    /*
+     * Returns the combined value of the cascaded PICs irq
+     * request register
+     */
+    uint16_t get_irr(void);
+
+    /*
+     * Returns the combined value of the cascaded PICs
+     * in-service register
+     */
+    uint16_t get_isr(void);
+
+    void set_irq_mask(uint8_t irq_line);
+    void clear_irq_mask(uint8_t irq_line);
+
+public:
+    uint16_t get_irq_reg(int ocw3);
+};
+
+}
+
 #define PIC1         0x20 // IO base address for master PIC
 #define PIC2         0xA0 // IO base address for slave PIC
 #define PIC1_COMMAND PIC1
@@ -10,11 +56,6 @@
 #define PIC2_COMMAND PIC2
 #define PIC2_DATA    (PIC2 + 1)
 #define PIC_EOI      0x20 // End-of-interrupt command code
-
-void pic_send_eoi(uint8_t irq);
-
-/* reinitialize the PIC controllers, giving them specified vector offsets
-   rather than 8h and 70h, as configured by default */
 
 #define ICW1_ICW4      0x01 // Indicates that ICW4 will be present
 #define ICW1_SINGLE    0x02 // Single (cascade) mode
@@ -30,26 +71,7 @@ void pic_send_eoi(uint8_t irq);
 
 #define CASCADE_IRQ 2
 
-/*
-arguments:
-    offset1 - vector offset for master PIC
-        vectors on the master become offset1..offset1+7
-    offset2 - same for slave PIC: offset2..offset2+7
-*/
-
-void pic_init(int offset1, int offset2);
-void pic_disable(void);
-
-void irq_set_mask(uint8_t irq_line);
-void irq_clear_mask(uint8_t irq_line);
-
 #define PIC_READ_IRR 0x0a // OCW3 irq ready next CMD read
 #define PIC_READ_ISR 0x0b // OCW3 irq service next CMD read
-
-// Returns the combined value of the cascaded PICs irq request register
-uint16_t pic_get_irr(void);
-
-// Returns the combined value of the cascaded PICs in-service register
-uint16_t pic_get_isr(void);
 
 #endif

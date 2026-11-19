@@ -4,7 +4,7 @@
 #include <sys/tty.h>
 #endif
 
-int putchar(int ic)
+extern "C" int putchar(int ic)
 {
 #if defined(__is_libk)
     char c = (char) ic;

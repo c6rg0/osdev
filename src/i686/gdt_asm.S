@@ -5,9 +5,9 @@ gdtr:
     .long 0 // For base storage
 
 .section .text
-.global set_gdt
-.type set_gdt, @function
-set_gdt:
+.global set
+.type set, @function
+set:
     mov 4(%esp), %eax
     lgdt (%eax)
     ret

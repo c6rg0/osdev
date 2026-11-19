@@ -3,6 +3,46 @@
 
 #include <stdint.h>
 
+extern "C" {
+    int set(struct gdt_ptr* ptr);
+    int reload_segments(void);
+    int load_tss(void);
+}
+
+namespace Sys
+{
+
+class Gdt {
+public:
+    Gdt(void);
+
+private:
+    uint64_t table [6];
+    uint64_t create_descriptor(uint32_t base, uint32_t limit, uint16_t flag);
+};
+
+}
+
+struct gdt_ptr {
+    uint16_t limit;
+    uint32_t base;
+} __attribute__((packed));
+
+struct tss_struct {
+    uint32_t prev_tss; // Previous TSS (used with hardware task switching,
+                       // unused here)
+    uint32_t esp0; // Stack pointer to load on ring 0 interrupt/privilege switch
+    uint32_t ss0;  // Stack segment to load on ring 0 interrupt/privilege switch
+    uint32_t esp1, ss1, esp2, ss2;
+    uint32_t cr3;
+    uint32_t eip, eflags;
+    uint32_t eax, ecx, edx, ebx, esp, ebp, esi, edi;
+    uint32_t es, cs, ss, ds, fs, gs;
+    uint32_t ldt;
+    uint16_t trap;
+    uint16_t iomap_base;
+} __attribute__((packed));
+
 // Each define here is for a specific flag in the descriptor:
 // https://www.intel.com/content/www/us/en/developer/articles/technical/intel-sdm.html
 // (iirc chapter 3.4/5)
@@ -54,34 +94,5 @@
 #define GDT_TSS                                                               \
     SEG_DESCTYPE(0) | SEG_PRES(1) | SEG_SAVL(0) | SEG_LONG(0) | SEG_SIZE(1) | \
         SEG_GRAN(0) | SEG_PRIV(0) | TSS_ACCESS_BYTE
-
-struct gdt_ptr {
-    uint16_t limit;
-    uint32_t base;
-} __attribute__((packed));
-
-typedef struct {
-    uint32_t prev_tss; // Previous TSS (used with hardware task switching,
-                       // unused here)
-    uint32_t esp0; // Stack pointer to load on ring 0 interrupt/privilege switch
-    uint32_t ss0;  // Stack segment to load on ring 0 interrupt/privilege switch
-    uint32_t esp1, ss1, esp2, ss2;
-    uint32_t cr3;
-    uint32_t eip, eflags;
-    uint32_t eax, ecx, edx, ebx, esp, ebp, esi, edi;
-    uint32_t es, cs, ss, ds, fs, gs;
-    uint32_t ldt;
-    uint16_t trap;
-    uint16_t iomap_base;
-} __attribute__((packed)) tss_struct;
-
-// gdt_asm.S
-int set_gdt(struct gdt_ptr* ptr);
-int reload_segments(void);
-int load_tss(void);
-
-// gdt.c
-uint64_t create_descriptor(uint32_t base, uint32_t limit, uint16_t flag);
-void gdt_init(void);
 
 #endif

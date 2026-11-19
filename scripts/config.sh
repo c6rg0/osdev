@@ -8,6 +8,7 @@ export MAKE=${MAKE:-make}
 export AR=${HOST}-${EXECUTABLE_FORMAT}-ar
 export AS=${HOST}-${EXECUTABLE_FORMAT}-as
 export CC=${HOST}-${EXECUTABLE_FORMAT}-gcc
+export CXX=${HOST}-${EXECUTABLE_FORMAT}-g++
 
 # The below are related to the kernel headers
 export PREFIX=/usr

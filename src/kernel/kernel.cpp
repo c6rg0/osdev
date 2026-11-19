@@ -2,25 +2,29 @@
 #include <sys/gdt.h>
 #include <sys/idt.h>
 #include <sys/pic.h>
-#include <sys/tty.h>
+// #include <sys/tty.h>
 
-void kernel_main(void)
+extern "C" void kernel_main(void)
 {
-    tty_init();
     printf("> TTY initialised!\n");
-    gdt_init();
+
+    Sys::Gdt gdt;
     printf("> GDT initialised!\n");
-    idt_init();
+
+    Sys::Idt idt;
     printf("> IDT initialised!\n");
-    pic_init(0x20, 0x28); // magic hexes
+
+    Sys::Pic pic(0x20, 0x28); // magic hexes
     printf("> PIC initialised!\n");
-    uint16_t irr = pic_get_irr();
+
+    uint16_t irr = pic.get_irr();
     printf("%p\n", irr);
-    uint16_t isr = pic_get_isr();
+
+    uint16_t isr = pic.get_isr();
     printf("%p\n", isr);
 
-    // You can use a break point to confirm that the GDT and IDT are getting
-    // loaded:
+    // You can use a break point to confirm that the GDT and
+    // IDT are getting loaded:
     __asm__ volatile("1: jmp 1b");
 
     /*
